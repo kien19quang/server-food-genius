@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Category } from './category.schema';
 import { SchemaTypes } from 'mongoose';
+import { Dish } from './dish.schema';
 
 @Schema({
   timestamps: true,
@@ -17,10 +18,10 @@ export class Restaurant {
   description: string;
 
   @Prop()
-  lng: number;
+  lng: string;
 
   @Prop()
-  lat: number;
+  lat: string;
 
   @Prop()
   address: string;
@@ -33,6 +34,9 @@ export class Restaurant {
 
   @Prop({ type: [{ type: SchemaTypes.ObjectId, ref: 'Category' }] })
   categories: Category[]
+
+  @Prop({ type: [{ type: SchemaTypes.ObjectId, ref: 'Dish' }] })
+  dishes: Dish[]
 }
 
 export const RestaurantSchema = SchemaFactory.createForClass(Restaurant);

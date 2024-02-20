@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { RestaurantService } from "../services/restaurant.service";
-import { RestaurantDto } from "../dtos/restaurant.dto";
+import { DishDto, FeaturedDto, RestaurantDto } from "../dtos/restaurant.dto";
 import { JwtGuard } from "src/core/guards/jwt.guard";
 
 
@@ -17,10 +17,47 @@ export class RestaurantController {
     return await this.restaurantService.getListRestaurant();
   }
 
+  @Get('featured')
+  async getListFeatured() {
+    return await this.restaurantService.getListFeatured()
+  }
+
+  @Get(':id')
+  @UseGuards(JwtGuard)
+  async getDetailRestaurant(
+    @Param('id') id: string
+  ) {
+    return await this.restaurantService.getDetailRestaurant(id)
+  }
+
   @Post('')
   @UseGuards(JwtGuard)
   async createCategory(@Body() data: RestaurantDto) {
     return await this.restaurantService.createRestaurant(data);
+  }
+
+  @Post('dish')
+  @UseGuards(JwtGuard)
+  async createDish(@Body() data: DishDto) {
+    return await this.restaurantService.createDish(data)
+  }
+
+  @Post('featured')
+  @UseGuards(JwtGuard)
+  async createFeatured(@Body() data: FeaturedDto) {
+    return await this.restaurantService.createFeatured(data)
+  }
+
+  @Put('dish/:id')
+  @UseGuards(JwtGuard)
+  async updateDish(@Param('id') id: string, @Body() data: DishDto) {
+    return await this.restaurantService.updateDish(id, data);
+  }
+
+  @Put('featured/:id')
+  @UseGuards(JwtGuard)
+  async updateFeatured(@Param('id') id: string, @Body() data: FeaturedDto) {
+    return await this.restaurantService.updateFeatured(id, data);
   }
 
   @Put(':id')
@@ -29,9 +66,21 @@ export class RestaurantController {
     return await this.restaurantService.updateRestaurant(id, data);
   }
 
+  @Delete('dish/:id')
+  @UseGuards(JwtGuard)
+  async deleteDish(@Param('id') id: string) {
+    return await this.restaurantService.deleteDish(id);
+  }
+
+  @Delete('featured/:id')
+  @UseGuards(JwtGuard)
+  async deleteFeatured(@Param('id') id: string) {
+    return await this.restaurantService.deleteFeatured(id);
+  }
+
   @Delete(':id')
   @UseGuards(JwtGuard)
-  async deleteCategory(@Param('id') id) {
+  async deleteCategory(@Param('id') id: string) {
     return await this.restaurantService.deleteRestaurant(id);
   }
 }

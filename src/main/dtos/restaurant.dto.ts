@@ -16,15 +16,55 @@ export class RestaurantDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsNumber()
-  lng: number;
+  lng: string;
 
   @ApiProperty()
   @IsNotEmpty()
-  @IsNumber()
-  lat: number;
+  lat: string;
 
   @ApiProperty()
   @IsNotEmpty()
   address: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  categoriesIds?: string[]
+}
+
+
+export class DishDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  name: string;
+
+  @ApiProperty()
+  description: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  image: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  price: number;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  restaurantId: string
+}
+
+export class FeaturedDto {
+  @ApiProperty()
+  @IsNotEmpty()
+  title: string;
+
+  @ApiProperty()
+  description: string;
+
+  @ApiProperty()
+  @IsNotEmpty()
+  isVisible: boolean;
+
+  @ApiProperty()
+  restaurantIds: string[]
 }
