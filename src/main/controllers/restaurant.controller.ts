@@ -23,7 +23,6 @@ export class RestaurantController {
   }
 
   @Get(':id')
-  @UseGuards(JwtGuard)
   async getDetailRestaurant(
     @Param('id') id: string
   ) {

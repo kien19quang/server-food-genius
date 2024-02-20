@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Param, Post, UseGuards } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { StripeService } from "../services/stripe.service";
 import { JwtGuard } from "src/core/guards/jwt.guard";
@@ -15,5 +15,12 @@ export class PaymentController {
     @Body() data: PaymentIntentDto
   ) {
     return await this.stripeService.createPaymentIntents(data.amount)
+  }
+
+  @Delete(':id')
+  async deleteTransaction(
+    @Param('id') id: string
+  ) {
+    return await this.stripeService.deleteTransaction(id)
   }
 }

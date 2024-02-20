@@ -22,10 +22,20 @@ export class StripeService {
       })
   
       return {
-        paymentIntent: paymentIntent.client_secret
+        paymentIntent: paymentIntent.client_secret,
+        id: paymentIntent.id
       }
     } catch (e) {
       throw new BadRequestException(e?.message || 'Lỗi không tạo được thanh toán')
+    }
+  }
+
+  async deleteTransaction(id: string) {
+    try {
+      const response = await this.stripe.paymentIntents.cancel(id)
+      return response
+    } catch (e) {
+      throw new BadRequestException(e?.message || 'Không thể huỷ giao dịch')
     }
   }
 }

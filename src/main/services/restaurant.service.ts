@@ -9,7 +9,8 @@ import { Featured } from 'src/schema/featured.schema';
 @Injectable()
 export class RestaurantService {
   constructor(
-    @InjectModel(Restaurant.name) private readonly restaurantModel: Model<Restaurant>,
+    @InjectModel(Restaurant.name)
+    private readonly restaurantModel: Model<Restaurant>,
     @InjectModel(Dish.name) private readonly dishModel: Model<Dish>,
     @InjectModel(Featured.name) private readonly featuredModel: Model<Featured>,
   ) {}
@@ -38,6 +39,8 @@ export class RestaurantService {
       lng: data.lng,
       lat: data.lat,
       categories: data.categoriesIds,
+      reviews: 3000,
+      stars: 5
     });
   }
 
@@ -53,6 +56,8 @@ export class RestaurantService {
           lng: data.lng,
           lat: data.lat,
           categories: data.categoriesIds,
+          reviews: 3000,
+          stars: 5
         },
         {
           new: true,
@@ -109,10 +114,15 @@ export class RestaurantService {
     return await this.featuredModel
       .find()
       .sort({ order: 'asc' })
-      .populate('restaurants')
+      .populate({
+        path: 'restaurants',
+        populate: {
+          path: 'categories',
+        },
+      })
       .exec();
   }
-  
+
   async createFeatured(data: FeaturedDto) {
     const countFeatured = await this.featuredModel.countDocuments();
     const featured = await this.featuredModel.create({
@@ -120,11 +130,11 @@ export class RestaurantService {
       description: data.description,
       isVisible: data.isVisible,
       restaurants: data.restaurantIds,
-      order: countFeatured + 1
-    })
+      order: countFeatured + 1,
+    });
 
-    await featured.populate('restaurants')
-    
+    await featured.populate('restaurants');
+
     return featured;
   }
 

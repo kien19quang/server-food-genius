@@ -5,6 +5,8 @@ import { CreateUserDto } from '../dtos/user.dto';
 import { LoginDto } from '../dtos/auth.dto';
 import { AuthService } from '../services/auth.service';
 import { RefreshJwtGuard } from '../../core/guards/refresh.guard';
+import { CreateCustomerDto } from '../dtos/customer.dto';
+import { CustomerService } from '../services/customer.service';
 
 @Controller('auth')
 @ApiTags('Auth')
@@ -12,6 +14,7 @@ export class AuthController {
   constructor(
     private readonly userService: UserService,
     private readonly authService: AuthService,
+    private readonly customerService: CustomerService,
   ) {}
 
   @Post('register')
@@ -29,4 +32,15 @@ export class AuthController {
   async refreshToken(@Request() req: Record<string, any>) {
     return await this.authService.refreshToken(req.user);
   }
+
+  @Post('customer/register')
+  async registerCustomer(@Body() data: CreateCustomerDto) {
+    return await this.customerService.createCustomer(data)
+  }
+
+  @Post('customer/login')
+  async customerLogin(@Body() data: LoginDto) {
+    return await this.authService.customerLogin(data);
+  }
+
 }
