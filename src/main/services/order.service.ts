@@ -11,10 +11,12 @@ export class OrderService {
   ) {}
 
   async getListOrder(restaurantId: string) {
-    return await this.orderModel.find({ restaurant: restaurantId }).sort({ createdAt: 'asc' }).populate(['restaurant', 'customer']);
+    return await this.orderModel.find({ restaurant: restaurantId }).sort({ createdAt: 'asc' }).populate(['restaurant', 'customer']).exec();
   }
 
   async createOrder(data: OrderDto, customer: any) {
+    console.log(data)
+    console.log(customer)
     return await this.orderModel.create({
       price: data.price,
       isPaid: data.isPaid,

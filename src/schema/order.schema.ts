@@ -17,7 +17,7 @@ export class Order {
   @Prop({ type: Boolean, default: false })
   isShipped: boolean
 
-  @Prop({ type: SchemaTypes.ObjectId, ref: 'Customer' })
+  @Prop({ type: SchemaTypes.ObjectId, ref: 'Restaurant' })
   restaurant: Restaurant
 
   @Prop({ type: SchemaTypes.ObjectId, ref: 'Customer' })

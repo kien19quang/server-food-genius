@@ -18,6 +18,7 @@ export class AuthService {
     const user = await this.validateUser(data);
     const payload = {
       username: user.email,
+      _id: user._id,
       sub: {
         name: user.name,
       },
@@ -47,6 +48,7 @@ export class AuthService {
 
     const payload = {
       username: customer.email,
+      _id: customer._id,
       sub: {
         name: customer.name,
       },

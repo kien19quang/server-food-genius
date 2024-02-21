@@ -5,6 +5,7 @@ import { Restaurant } from 'src/schema/restaurant.schema';
 import { DishDto, FeaturedDto, RestaurantDto } from '../dtos/restaurant.dto';
 import { Dish } from 'src/schema/dish.schema';
 import { Featured } from 'src/schema/featured.schema';
+import { FeaturedFilter } from '../filters/restaurant.filter';
 
 @Injectable()
 export class RestaurantService {
@@ -110,17 +111,39 @@ export class RestaurantService {
     return await this.dishModel.deleteOne({ _id: id });
   }
 
-  async getListFeatured() {
-    return await this.featuredModel
-      .find()
-      .sort({ order: 'asc' })
-      .populate({
+  async getListFeatured(query: FeaturedFilter = {}) {
+    const { categoryId } = query
+
+    const sql = this.featuredModel.find().sort({ order: 'asc' })
+
+    if (categoryId) {
+      sql.populate({
+        path: 'restaurants',
+        match: {
+          categories: {
+            $elemMatch: {
+              $eq: categoryId
+            }
+          }
+        },
+        populate: {
+          path: 'categories',
+        },
+      })
+    }
+    else {
+      sql.populate({
         path: 'restaurants',
         populate: {
           path: 'categories',
         },
       })
-      .exec();
+    }
+
+    return await sql.exec().then(featureds => {
+      // Lọc các featured có ít nhất một nhà hàng
+      return featureds.filter(featured => featured.restaurants.length > 0);
+    })
   }
 
   async createFeatured(data: FeaturedDto) {

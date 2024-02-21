@@ -1,8 +1,9 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards } from "@nestjs/common";
 import { ApiTags } from "@nestjs/swagger";
 import { RestaurantService } from "../services/restaurant.service";
 import { DishDto, FeaturedDto, RestaurantDto } from "../dtos/restaurant.dto";
 import { JwtGuard } from "src/core/guards/jwt.guard";
+import { FeaturedFilter } from "../filters/restaurant.filter";
 
 
 @Controller('restaurant')
@@ -18,8 +19,8 @@ export class RestaurantController {
   }
 
   @Get('featured')
-  async getListFeatured() {
-    return await this.restaurantService.getListFeatured()
+  async getListFeatured(@Query() query: FeaturedFilter) {
+    return await this.restaurantService.getListFeatured(query)
   }
 
   @Get(':id')
